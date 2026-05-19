@@ -3,6 +3,9 @@ import { Login } from './pages/login/login';
 import { Header } from './pages/header/header';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { EmployeeForm } from './pages/employee-form/employee-form';
+import { EmployeeList } from './pages/employee-list/employee-list';
+import { Department } from './pages/department/department';
+import { Designation } from './pages/designation/designation';
 
 export const routes: Routes = [
     {
@@ -19,12 +22,29 @@ export const routes: Routes = [
         component: Header,
         children: [
             {
+                path: '',
+                redirectTo: 'dashboard',
+                pathMatch: 'full'
+            },
+            {
                 path: 'dashboard',
                 component: Dashboard
             },
             {
                 path: 'new employee',
                 component: EmployeeForm
+            },
+            {
+                path: 'employee-list',
+                component: EmployeeList
+            },
+            {
+                path: 'department',
+                component: Department
+            },
+            {
+                path: 'designation',
+                component: Designation
             }
         ]
     }
