@@ -21,17 +21,19 @@ export class Login {
 
   login() {
     this.http.post(
-      'http://localhost:7011/api/EmployeeMaster/login',
+      'https://localhost:7011/api/EmployeeMaster/login',
       this.loginObj
     ).subscribe({
       next: (result: any) => {
-        debugger;
         localStorage.setItem('empLoginUser', JSON.stringify(result.data));
         this.router.navigateByUrl("/dashboard");
       },
       error: (err: any) => {
-       debugger;
-       alert(err.error.message);
+       const message = err?.error instanceof ProgressEvent
+        ? 'Unable to reach the login server. Check that the backend is running.'
+        : err?.error?.message || err?.error || err?.message || 'Login failed. Please try again.';
+
+       alert(message);
       }
     });
   }
