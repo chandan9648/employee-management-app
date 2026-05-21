@@ -27,7 +27,7 @@ export class Login {
       next: (result: any) => {
         debugger;
         localStorage.setItem('empLoginUser', JSON.stringify(result.data));
-        this.router.navigateByUrl("dashboard");
+        this.router.navigateByUrl("/dashboard");
       },
       error: (err: any) => {
        debugger;
