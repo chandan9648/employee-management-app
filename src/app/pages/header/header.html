@@ -1,1 +1,70 @@
-<p>header works!</p>
+<div class="admin-shell" [class.sidebar-collapsed]="isCollapsed" [class.mobile-sidebar-open]="isMobileSidebarOpen">
+	<div class="sidebar-backdrop" (click)="closeSidebar()"></div>
+
+	<aside class="sidebar">
+		<div class="sidebar-brand">
+			<div class="brand-mark">
+				<i class="fa-solid fa-layer-group"></i>
+			</div>
+			<div class="brand-copy">
+				<div class="brand-title">Employee Admin</div>
+				<div class="brand-subtitle">Management panel</div>
+			</div>
+		</div>
+
+		<nav class="sidebar-nav">
+			<a routerLink="/dashboard" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+				<i class="fa-solid fa-chart-line nav-icon"></i>
+				<span>Dashboard</span>
+			</a>
+			<a routerLink="/employee-list" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+				<i class="fa-solid fa-users nav-icon"></i>
+				<span>Employees</span>
+			</a>
+			<a routerLink="/new-employee" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+				<i class="fa-solid fa-user-plus nav-icon"></i>
+				<span>Add Employee</span>
+			</a>
+			<a routerLink="/department" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+				<i class="fa-solid fa-building nav-icon"></i>
+				<span>Departments</span>
+			</a>
+			<a routerLink="/designation" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+				<i class="fa-solid fa-id-badge nav-icon"></i>
+				<span>Designations</span>
+			</a>
+		</nav>
+
+		<div class="sidebar-footer">
+			<button type="button" class="logout-button" routerLink="/login" (click)="logout()">
+				<i class="fa-solid fa-right-from-bracket"></i>
+				<span>Logout</span>
+			</button>
+		</div>
+	</aside>
+
+	<div class="main-panel">
+		<header class="topbar shadow-sm">
+			<div class="d-flex align-items-center gap-3">
+				<button type="button" class="btn btn-light toggle-button" (click)="toggleSidebar()">
+					<i class="fa-solid fa-bars"></i>
+				</button>
+				<div>
+					<div class="topbar-eyebrow">Administration</div>
+					<h1 class="topbar-title mb-0">Employee Management</h1>
+				</div>
+			</div>
+
+			<div class="topbar-actions">
+				<div class="topbar-chip">
+					<i class="fa-solid fa-circle-user"></i>
+					<span>Admin</span>
+				</div>
+			</div>
+		</header>
+
+		<main class="content-area">
+			<router-outlet></router-outlet>
+		</main>
+	</div>
+</div>

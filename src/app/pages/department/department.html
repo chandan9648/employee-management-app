@@ -1,1 +1,85 @@
-<p>department works!</p>
+<section class="department-page">
+	<div class="page-shell">
+		<header class="page-header">
+			<div>
+				<p class="eyebrow">Master Data</p>
+				<h1>Department Management</h1>
+				<p class="subtitle">Create, view, and manage department records from a single static layout.</p>
+			</div>
+			<div class="header-badge">CRUD</div>
+		</header>
+
+		<div class="form-card">
+			<div class="form-grid">
+				<div class="field field-name">
+					<label for="departmentName">Department Name</label>
+					<input id="departmentName" type="text" placeholder="Enter department name" />
+				</div>
+
+				<div class="field field-active">
+					<label class="checkbox-label" for="isActive">
+						<input id="isActive" type="checkbox" checked />
+						<span>Is Active</span>
+					</label>
+				</div>
+
+				<div class="actions">
+					<button type="button" class="btn btn-primary">Save</button>
+					<button type="reset" class="btn btn-secondary">Reset</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="table-card">
+			<div class="table-header">
+				<h2>Department List</h2>
+				<span class="record-count">5 Records</span>
+			</div>
+
+			<div class="table-wrap">
+				<table>
+					<thead>
+						<tr>
+							<th style="width: 90px;">#</th>
+							<th>Department Name</th>
+							<th style="width: 140px;">Status</th>
+							<th style="width: 180px;">Created By</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>Human Resources</td>
+							<td><span class="status active">Active</span></td>
+							<td>Admin</td>
+						</tr>
+						<tr>
+							<td>2</td>
+							<td>Finance</td>
+							<td><span class="status active">Active</span></td>
+							<td>Admin</td>
+						</tr>
+						<tr>
+							<td>3</td>
+							<td>Operations</td>
+							<td><span class="status active">Active</span></td>
+							<td>Admin</td>
+						</tr>
+						<tr>
+							<td>4</td>
+							<td>Support</td>
+							<td><span class="status inactive">Inactive</span></td>
+							<td>Admin</td>
+						</tr>
+						<tr>
+							<td>5</td>
+							<td>Research</td>
+							<td><span class="status active">Active</span></td>
+							<td>Admin</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</section>

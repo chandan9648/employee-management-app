@@ -31,8 +31,13 @@ export const routes: Routes = [
                 component: Dashboard
             },
             {
-                path: 'new employee',
+                path: 'new-employee',
                 component: EmployeeForm
+            },
+            {
+                path: 'new employee',
+                redirectTo: 'new-employee',
+                pathMatch: 'full'
             },
             {
                 path: 'employee-list',
