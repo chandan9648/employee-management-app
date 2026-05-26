@@ -9,6 +9,6 @@ export class Master {
   http = inject(HttpClient);
 
   getAllDept(){
-    return this.http.get(this.apiUrl + "DepartmentMaster/GetAllDepartments");
+    return this.http.get(this.apiUrl + '/DepartmentMaster/GetAllDepartments');
   }
 }

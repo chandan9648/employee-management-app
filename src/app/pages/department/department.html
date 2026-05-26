@@ -6,7 +6,7 @@
 				<h1>Department Management</h1>
 				<p class="subtitle">Create, view, and manage department records from a single static layout.</p>
 			</div>
-			<div class="header-badge">CRUD</div>
+			<!-- <div class="header-badge">CRUD</div> -->
 		</header>
 
 		<div class="form-card">
@@ -47,7 +47,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						@for(item of deptList; track $index) {
+						@for(item of deptList(); track $index) {
 							<tr>
 								<td>{{ $index + 1 }}</td>
 								<td>{{ item.departmentName }}</td>

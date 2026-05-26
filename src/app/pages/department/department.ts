@@ -1,7 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { Department as DepartmentModel } from '../../models/Department.model';
 import { FormsModule } from '@angular/forms';
 import { Master } from '../../services/master';
+
 
 @Component({
   selector: 'app-department',
@@ -14,7 +15,7 @@ export class Department implements OnInit {
 
   newDepObj: DepartmentModel = new DepartmentModel();
   masterService = inject(Master);
-  deptList : DepartmentModel[] = [];
+  deptList: WritableSignal<DepartmentModel[]> = signal([]);
   ngOnInit(): void {
     this.getAllDepartments();
   }
@@ -29,7 +30,7 @@ export class Department implements OnInit {
   getAllDepartments() {
     this.masterService.getAllDept().subscribe({
       next: (result: any) => {
-        this.deptList = result;
+        this.deptList.set(result);
       }
     })
 
