@@ -25,7 +25,15 @@ export class Department implements OnInit {
   }
 
   SaveDept() {
-
+   this.masterService.saveDept(this.newDepObj).subscribe({
+    next: (result: any) => {
+     debugger;
+     alert("Department saved successfully");
+    },
+    error: (error)=>{
+      debugger;
+    }
+   })
   }
   getAllDepartments() {
     this.masterService.getAllDept().subscribe({
