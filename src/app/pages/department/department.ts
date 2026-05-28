@@ -29,9 +29,11 @@ export class Department implements OnInit {
     next: (result: any) => {
      debugger;
      alert("Department saved successfully");
+     this.getAllDepartments();
     },
     error: (error)=>{
       debugger;
+      alert(error.error);
     }
    })
   }
