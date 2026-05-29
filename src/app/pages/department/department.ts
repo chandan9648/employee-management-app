@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Department as DepartmentModel } from '../../models/Department.model';
 import { FormsModule } from '@angular/forms';
 import { Master } from '../../services/master';
@@ -7,7 +8,7 @@ import { Master } from '../../services/master';
 @Component({
   selector: 'app-department',
   standalone: true,
-  imports: [FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './department.html',
   styleUrl: './department.css',
 })
@@ -39,6 +40,22 @@ export class Department implements OnInit {
     }
 
     this.deptList.update((items) => items.filter((dept) => dept.departmentId !== item.departmentId));
+  }
+
+  //Update Department
+  UpdateDept() {
+    const index = this.deptList().findIndex(dept => dept.departmentId === this.newDepObj.departmentId);
+    if (index !== -1) {
+      this.deptList.update(items => {
+        const updatedItems = [...items];
+        updatedItems[index] = { ...this.newDepObj };
+        return updatedItems;
+      });
+      alert("Department updated successfully");
+      this.resetForm();
+    } else {
+      alert("Department not found");
+    }
   }
 
   //Save Department

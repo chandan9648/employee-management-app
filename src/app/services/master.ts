@@ -15,4 +15,12 @@ export class Master {
   saveDept(obj: Department){
     return this.http.post(this.apiUrl + '/DepartmentMaster/AddDepartment', obj);
   }
+
+  updateDept(obj: Department){
+    return this.http.put(this.apiUrl + '/DepartmentMaster/UpdateDepartment', obj);
+  }
+
+  deleteDept(id: number){
+    return this.http.delete(this.apiUrl + '/DepartmentMaster/DeleteDepartment?departmentId=' + id);
+  }
 }

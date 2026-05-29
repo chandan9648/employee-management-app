@@ -23,7 +23,10 @@
 				</div>
 
 				<div class="actions">
-					<button (click)="SaveDept()" type="button" class="btn btn-primary">Save</button>
+								<button *ngIf="newDepObj.departmentId; else saveButton" (click)="UpdateDept()" type="button" class="btn btn-primary">Update</button>
+								<ng-template #saveButton>
+									<button (click)="SaveDept()" type="button" class="btn btn-primary">Save</button>
+								</ng-template>
 					<button (click)="resetForm()" type="reset" class="btn btn-secondary">Reset</button>
 				</div>
 			</div>
@@ -46,19 +49,21 @@
 						</tr>
 					</thead>
 					<tbody>
-						@for(item of deptList(); track $index) {
-							<tr>
-								<td>{{ $index + 1 }}</td>
-								<td>{{ item.departmentName }}</td>
-								<td><span class="status {{ item.isActive ? 'active' : 'inactive' }}">{{ item.isActive ? 'Active' : 'Inactive' }}</span></td>
-								<td>
-									<div class="row-actions">
-										<button type="button" class="btn btn-link" (click)="editDepartment(item)">Edit</button>
-										<button type="button" class="btn btn-link danger" (click)="deleteDepartment(item)">Delete</button>
-									</div>
-								</td>
-							</tr>
-						}
+								<tr *ngFor="let item of deptList(); let index = index">
+									<td>{{ index + 1 }}</td>
+									<td>{{ item.departmentName }}</td>
+									<td>
+										<span class="status" [class.active]="item.isActive" [class.inactive]="!item.isActive">
+											{{ item.isActive ? 'Active' : 'Inactive' }}
+										</span>
+									</td>
+									<td>
+										<div class="row-actions">
+											<button type="button" class="btn btn-link" (click)="editDepartment(item)">Edit</button>
+											<button type="button" class="btn btn-link danger" (click)="deleteDepartment(item)">Delete</button>
+										</div>
+									</td>
+								</tr>
 					</tbody>
 				</table>
 			</div>
