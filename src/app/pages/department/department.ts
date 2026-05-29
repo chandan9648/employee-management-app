@@ -40,9 +40,30 @@ export class Department implements OnInit {
   getAllDepartments() {
     this.masterService.getAllDept().subscribe({
       next: (result: any) => {
-        this.deptList.set(result);
+        this.deptList.set(this.normalizeDepartments(result));
+      },
+      error: (error: any) => {
+        console.error('Failed to load departments', error);
+        this.deptList.set([]);
       }
     })
 
+  }
+
+  private normalizeDepartments(result: unknown): DepartmentModel[] {
+    if (Array.isArray(result)) {
+      return result as DepartmentModel[];
+    }
+
+    if (result && typeof result === 'object') {
+      const response = result as { data?: unknown; result?: unknown; items?: unknown };
+      const payload = response.data ?? response.result ?? response.items;
+
+      if (Array.isArray(payload)) {
+        return payload as DepartmentModel[];
+      }
+    }
+
+    return [];
   }
 }

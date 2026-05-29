@@ -5,7 +5,7 @@ import { Department } from '../models/Department.model';
   providedIn: 'root',
 })
 export class Master {
-  apiUrl = 'http://localhost:7109/api';
+  apiUrl = 'https://localhost:7011/api';
   http = inject(HttpClient);
 
   getAllDept(){
@@ -13,6 +13,6 @@ export class Master {
   }
 
   saveDept(obj: Department){
-    return this.http.post(this.apiUrl + "DepartmentMaster/AddDepartment", obj);
+    return this.http.post(this.apiUrl + '/DepartmentMaster/AddDepartment', obj);
   }
 }
