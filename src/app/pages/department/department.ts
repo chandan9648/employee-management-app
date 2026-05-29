@@ -20,10 +20,28 @@ export class Department implements OnInit {
     this.getAllDepartments();
   }
 
+  //Reset Form
   resetForm() {
     this.newDepObj = new DepartmentModel();
   }
 
+  //Edit Department
+  editDepartment(item: DepartmentModel) {
+    this.newDepObj = { ...item };
+  }
+
+  //Delete Department
+  deleteDepartment(item: DepartmentModel) {
+    const shouldDelete = confirm(`Delete department "${item.departmentName}"?`);
+
+    if (!shouldDelete) {
+      return;
+    }
+
+    this.deptList.update((items) => items.filter((dept) => dept.departmentId !== item.departmentId));
+  }
+
+  //Save Department
   SaveDept() {
    this.masterService.saveDept(this.newDepObj).subscribe({
     next: (result: any) => {
@@ -37,6 +55,8 @@ export class Department implements OnInit {
     }
    })
   }
+
+  //Get All Departments
   getAllDepartments() {
     this.masterService.getAllDept().subscribe({
       next: (result: any) => {
@@ -49,6 +69,7 @@ export class Department implements OnInit {
     })
 
   }
+
 
   private normalizeDepartments(result: unknown): DepartmentModel[] {
     if (Array.isArray(result)) {

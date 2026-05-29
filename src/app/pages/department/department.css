@@ -229,6 +229,35 @@ tbody tr:hover {
 	background: #fff7ed;
 }
 
+.row-actions {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.btn-link {
+	min-width: auto;
+	min-height: auto;
+	padding: 0;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	color: #0369a1;
+	font-size: 0.9rem;
+	font-weight: 700;
+	box-shadow: none;
+}
+
+.btn-link:hover {
+	transform: none;
+	text-decoration: underline;
+}
+
+.btn-link.danger {
+	color: #b91c1c;
+}
+
 .status {
 	display: inline-flex;
 	align-items: center;

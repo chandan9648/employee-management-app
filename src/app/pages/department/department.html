@@ -6,7 +6,6 @@
 				<h1>Department Management</h1>
 				<p class="subtitle">Create, view, and manage department records from a single static layout.</p>
 			</div>
-			<!-- <div class="header-badge">CRUD</div> -->
 		</header>
 
 		<div class="form-card">
@@ -45,18 +44,21 @@
 							<th style="width: 140px;">Status</th>
 							<th style="width: 180px;">Actions</th>
 						</tr>
-				</thead>
+					</thead>
 					<tbody>
 						@for(item of deptList(); track $index) {
 							<tr>
 								<td>{{ $index + 1 }}</td>
 								<td>{{ item.departmentName }}</td>
 								<td><span class="status {{ item.isActive ? 'active' : 'inactive' }}">{{ item.isActive ? 'Active' : 'Inactive' }}</span></td>
-								<td>Admin</td>
+								<td>
+									<div class="row-actions">
+										<button type="button" class="btn btn-link" (click)="editDepartment(item)">Edit</button>
+										<button type="button" class="btn btn-link danger" (click)="deleteDepartment(item)">Delete</button>
+									</div>
+								</td>
 							</tr>
 						}
-						
-				
 					</tbody>
 				</table>
 			</div>
