@@ -1,1 +1,145 @@
-<p>designation works!</p>
+<section class="designation-page">
+	<div class="page-shell">
+		<header class="page-header">
+			<div>
+				<p class="eyebrow">Master Data</p>
+				<h1>Designation Management</h1>
+				<p class="subtitle">Create, edit, and organize job titles across departments with a streamlined admin layout.</p>
+			</div>
+
+			<div class="header-stats">
+				<div class="stat-card">
+					<span>Total designations</span>
+					<strong>{{ designationCount() }}</strong>
+				</div>
+
+				<div class="stat-card accent">
+					<span>Departments covered</span>
+					<strong>{{ departmentCoverage() }}</strong>
+				</div>
+			</div>
+		</header>
+
+		@if (feedback()) {
+			<div class="feedback-banner" role="status">
+				{{ feedback() }}
+			</div>
+		}
+
+		<div class="workspace-grid">
+			<section class="form-card">
+				<div class="section-heading">
+					<div>
+						<h2>{{ isEditing() ? 'Edit Designation' : 'Create Designation' }}</h2>
+						<p>Assign a role to a department and keep the catalog easy to scan.</p>
+					</div>
+					<span class="mode-chip">{{ isEditing() ? 'Update mode' : 'New record' }}</span>
+				</div>
+
+				<form class="designation-form" [formGroup]="designationForm" (ngSubmit)="saveDesignation()">
+					<div class="field-group">
+						<label for="designationName">Designation Name</label>
+						<input
+							id="designationName"
+							type="text"
+							maxlength="50"
+							formControlName="designationName"
+							placeholder="e.g. Operations Manager"
+						/>
+						@if (designationForm.controls.designationName.touched && designationForm.controls.designationName.invalid) {
+							<p class="field-error">Designation name is required and must stay within 50 characters.</p>
+						}
+					</div>
+
+					<div class="field-group">
+						<label for="departmentId">Department</label>
+						<select id="departmentId" formControlName="departmentId">
+							@for (department of departmentOptions; track department.departmentId) {
+								<option [ngValue]="department.departmentId">{{ department.departmentName }}</option>
+							}
+						</select>
+						<p class="field-hint">Select the department that owns this designation.</p>
+					</div>
+
+					<div class="form-actions">
+						<button type="submit" class="btn btn-primary">
+							{{ isEditing() ? 'Update Designation' : 'Save Designation' }}
+						</button>
+						<button type="button" class="btn btn-secondary" (click)="resetForm()">Reset</button>
+					</div>
+				</form>
+			</section>
+
+			<aside class="preview-card">
+				<div class="section-heading compact">
+					<div>
+						<h2>Selection Preview</h2>
+						<p>Review the values before saving them to the list.</p>
+					</div>
+				</div>
+
+				<div class="preview-stack">
+					<div class="preview-item">
+						<span>Designation ID</span>
+						<strong>{{ designationForm.controls.designationId.value || 'New record' }}</strong>
+					</div>
+					<div class="preview-item">
+						<span>Designation Name</span>
+						<strong>{{ designationForm.controls.designationName.value || 'Not set yet' }}</strong>
+					</div>
+					<div class="preview-item">
+						<span>Department</span>
+						<strong>{{ departmentLabel(designationForm.controls.departmentId.value) }}</strong>
+					</div>
+				</div>
+			</aside>
+		</div>
+
+		<section class="table-card">
+			<div class="section-heading compact">
+				<div>
+					<h2>Designation List</h2>
+					<p>Track all current roles and update them without leaving the page.</p>
+				</div>
+				<span class="mode-chip subtle">{{ designationCount() }} records</span>
+			</div>
+
+			<div class="table-wrap">
+				<table>
+					<thead>
+						<tr>
+							<th style="width: 84px;">#</th>
+							<th>Designation</th>
+							<th>Department</th>
+							<th style="width: 150px;">Record ID</th>
+							<th style="width: 180px;">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						@for (item of designations(); track trackByDesignationId($index, item); let index = $index) {
+							<tr>
+								<td>{{ index + 1 }}</td>
+								<td>
+									<div class="designation-cell">
+										<strong>{{ item.designationName }}</strong>
+										<span>Maps to a department role</span>
+									</div>
+								</td>
+								<td>
+									<span class="department-pill">{{ departmentLabel(item.departmentId) }}</span>
+								</td>
+								<td>#{{ item.designationId }}</td>
+								<td>
+									<div class="row-actions">
+										<button type="button" class="btn btn-link" (click)="editDesignation(item)">Edit</button>
+										<button type="button" class="btn btn-link danger" (click)="deleteDesignation(item)">Delete</button>
+									</div>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+</section>
