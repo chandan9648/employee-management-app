@@ -9,3 +9,9 @@ export class Department {
         this.isActive = false;
     }
 }
+
+export interface Designation {
+    designationId: number;
+    DepartmentId: number;
+    designationName: string;
+}
