@@ -1,1 +1,206 @@
-<p>employee-form works!</p>
+<section class="employee-page">
+	<div class="page-shell">
+		<header class="page-header">
+			<div>
+				<p class="eyebrow">Employee Master</p>
+				<h1>Create Employee</h1>
+				<p class="subtitle">Capture employee details, contact information, and role assignment in one form.</p>
+			</div>
+
+			<div class="header-stats">
+				<div class="stat-card">
+					<span>Employee ID</span>
+					<strong>{{ employeeObj.employeeId || 'New record' }}</strong>
+				</div>
+
+				<div class="stat-card accent">
+					<span>Designation ID</span>
+					<strong>{{ employeeObj.designationId || 'Unset' }}</strong>
+				</div>
+			</div>
+		</header>
+
+		<div class="workspace-grid">
+			<section class="form-card">
+				<div class="section-heading">
+					<div>
+						<h2>Employee Details</h2>
+						<p>Enter the employee record exactly as it should appear in the master list.</p>
+					</div>
+					<span class="mode-chip">New record</span>
+				</div>
+
+				<div class="record-meta">
+					<div class="meta-item">
+						<span>Employee ID</span>
+						<strong>{{ employeeObj.employeeId || 'New record' }}</strong>
+					</div>
+					<div class="meta-item">
+						<span>Created</span>
+						<strong>{{ employeeObj.createdDate | date:'medium' }}</strong>
+					</div>
+					<div class="meta-item">
+						<span>Modified</span>
+						<strong>{{ employeeObj.modifiedDate | date:'medium' }}</strong>
+					</div>
+				</div>
+
+				<form class="employee-form" #employeeForm="ngForm" (ngSubmit)="saveEmployee()">
+					<div class="field-group field-span-2">
+						<label for="name">Employee Name</label>
+						<input
+							id="name"
+							type="text"
+							name="name"
+							required
+							maxlength="50"
+							[(ngModel)]="employeeObj.name"
+							placeholder="Enter employee name"
+						/>
+					</div>
+
+					<div class="field-group">
+						<label for="contactNo">Contact Number</label>
+						<input
+							id="contactNo"
+							type="text"
+							name="contactNo"
+							required
+							maxlength="10"
+							[(ngModel)]="employeeObj.contactNo"
+							placeholder="10-digit mobile number"
+						/>
+					</div>
+
+					<div class="field-group">
+						<label for="altContactNo">Alternate Contact</label>
+						<input
+							id="altContactNo"
+							type="text"
+							name="altContactNo"
+							maxlength="10"
+							[(ngModel)]="employeeObj.altContactNo"
+							placeholder="Optional alternate number"
+						/>
+					</div>
+
+					<div class="field-group field-span-2">
+						<label for="email">Email Address</label>
+						<input
+							id="email"
+							type="email"
+							name="email"
+							[(ngModel)]="employeeObj.email"
+							placeholder="name@company.com"
+						/>
+					</div>
+
+					<div class="field-group">
+						<label for="city">City</label>
+						<input
+							id="city"
+							type="text"
+							name="city"
+							[(ngModel)]="employeeObj.city"
+							placeholder="City name"
+						/>
+					</div>
+
+					<div class="field-group">
+						<label for="state">State</label>
+						<input
+							id="state"
+							type="text"
+							name="state"
+							[(ngModel)]="employeeObj.state"
+							placeholder="State name"
+						/>
+					</div>
+
+					<div class="field-group">
+						<label for="pincode">Pincode</label>
+						<input
+							id="pincode"
+							type="text"
+							name="pincode"
+							maxlength="10"
+							[(ngModel)]="employeeObj.pincode"
+							placeholder="Postal code"
+						/>
+					</div>
+
+					<div class="field-group">
+						<label for="designationId">Designation ID</label>
+						<input
+							id="designationId"
+							type="number"
+							name="designationId"
+							min="0"
+							[(ngModel)]="employeeObj.designationId"
+							placeholder="Numeric designation id"
+						/>
+					</div>
+
+					<div class="field-group field-span-2">
+						<label for="role">Role</label>
+						<input
+							id="role"
+							type="text"
+							name="role"
+							[(ngModel)]="employeeObj.role"
+							placeholder="e.g. Developer, Manager"
+						/>
+					</div>
+
+					<div class="field-group field-span-2">
+						<label for="address">Address</label>
+						<textarea
+							id="address"
+							name="address"
+							rows="4"
+							[(ngModel)]="employeeObj.address"
+							placeholder="House number, street, landmark, etc."
+						></textarea>
+					</div>
+
+					<div class="form-actions field-span-2">
+						<button type="submit" class="btn btn-primary" [disabled]="employeeForm.invalid">Save Employee</button>
+						<button type="button" class="btn btn-secondary" (click)="resetForm()">Reset</button>
+					</div>
+				</form>
+			</section>
+
+			<aside class="preview-card">
+				<div class="section-heading compact">
+					<div>
+						<h2>Record Preview</h2>
+						<p>Quick view of the data currently entered into the form.</p>
+					</div>
+				</div>
+
+				<div class="preview-stack">
+					<div class="preview-item">
+						<span>Name</span>
+						<strong>{{ employeeObj.name || 'Not set yet' }}</strong>
+					</div>
+					<div class="preview-item">
+						<span>Contact</span>
+						<strong>{{ employeeObj.contactNo || 'Not set yet' }}</strong>
+					</div>
+					<div class="preview-item">
+						<span>Email</span>
+						<strong>{{ employeeObj.email || 'Not set yet' }}</strong>
+					</div>
+					<div class="preview-item">
+						<span>Location</span>
+						<strong>{{ employeeObj.city || 'City' }}{{ employeeObj.state ? ', ' + employeeObj.state : '' }}</strong>
+					</div>
+					<div class="preview-item">
+						<span>Role</span>
+						<strong>{{ employeeObj.role || 'Not set yet' }}</strong>
+					</div>
+				</div>
+			</aside>
+		</div>
+	</div>
+</section>

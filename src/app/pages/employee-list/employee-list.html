@@ -1,1 +1,150 @@
-<p>employee-list works!</p>
+<section class="employee-page">
+	<div class="page-shell">
+		<header class="page-header">
+			<div>
+				<p class="eyebrow">Master Data</p>
+				<h1>Employee Directory</h1>
+				<p class="subtitle">Review employee records, search the local list, and open a quick preview from the table.</p>
+			</div>
+
+			<div class="header-stats">
+				<div class="stat-card">
+					<span>Total employees</span>
+					<strong>{{ totalEmployees() }}</strong>
+				</div>
+
+				<div class="stat-card accent">
+					<span>Visible rows</span>
+					<strong>{{ visibleEmployees() }}</strong>
+				</div>
+			</div>
+		</header>
+
+		@if (feedback()) {
+			<div class="feedback-banner" role="status">{{ feedback() }}</div>
+		}
+
+		<div class="toolbar-card">
+			<div class="search-field">
+				<label for="employeeSearch">Search employees</label>
+				<div class="search-input-wrap">
+					<input
+						id="employeeSearch"
+						type="search"
+							#searchInput
+						[value]="searchTerm()"
+							(input)="updateSearch(searchInput.value)"
+						placeholder="Search by name, role, city, contact, or ID"
+					/>
+					<button type="button" class="btn btn-secondary" (click)="clearSearch()">Clear</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="workspace-grid">
+			<section class="table-card">
+				<div class="section-heading compact">
+					<div>
+						<h2>Employee List</h2>
+						<p>Pick a row to inspect the record details in the preview panel.</p>
+					</div>
+					<span class="mode-chip subtle">{{ visibleEmployees() }} records</span>
+				</div>
+
+				<div class="table-wrap">
+					<table>
+						<thead>
+							<tr>
+								<th style="width: 72px;">#</th>
+								<th>Employee</th>
+								<th>Contact</th>
+								<th>Location</th>
+								<th>Role</th>
+								<th style="width: 150px;">Record ID</th>
+								<th style="width: 180px;">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							@for (item of filteredEmployees(); track trackByEmployeeId($index, item); let index = $index) {
+								<tr [class.active-row]="selectedEmployeeId() === item.employeeId">
+									<td>{{ index + 1 }}</td>
+									<td>
+										<div class="employee-cell">
+											<strong>{{ item.name }}</strong>
+											<span>{{ item.email }}</span>
+										</div>
+									</td>
+									<td>
+										<div class="contact-stack">
+											<span>{{ item.contactNo }}</span>
+											<small>{{ item.altContactNo || 'No alternate contact' }}</small>
+										</div>
+									</td>
+									<td>
+										<span class="location-pill">{{ item.city }}{{ item.state ? ', ' + item.state : '' }}</span>
+									</td>
+									<td>
+										<div class="role-stack">
+											<strong>{{ item.role }}</strong>
+											<span>Designation #{{ item.designationId }}</span>
+										</div>
+									</td>
+									<td>#{{ item.employeeId }}</td>
+									<td>
+										<div class="row-actions">
+											<button type="button" class="btn btn-link" (click)="selectEmployee(item)">View</button>
+											<button type="button" class="btn btn-link danger" (click)="deleteEmployee(item)">Delete</button>
+										</div>
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			</section>
+
+			<aside class="preview-card">
+				<div class="section-heading compact">
+					<div>
+						<h2>Record Preview</h2>
+						<p>Quick details for the selected employee.</p>
+					</div>
+				</div>
+
+				@if (selectedEmployee(); as employee) {
+					<div class="preview-stack">
+						<div class="preview-item">
+							<span>Name</span>
+							<strong>{{ employee.name }}</strong>
+						</div>
+						<div class="preview-item">
+							<span>Contact</span>
+							<strong>{{ employee.contactNo }}</strong>
+						</div>
+						<div class="preview-item">
+							<span>Email</span>
+							<strong>{{ employee.email }}</strong>
+						</div>
+						<div class="preview-item">
+							<span>Location</span>
+							<strong>{{ selectedLocation() }}</strong>
+						</div>
+						<div class="preview-item">
+							<span>Role</span>
+							<strong>{{ employee.role }}</strong>
+						</div>
+						<div class="preview-item">
+							<span>Updated</span>
+							<strong>{{ employee.modifiedDate | date:'medium' }}</strong>
+						</div>
+					</div>
+				} @else {
+					<div class="empty-state">
+						<p>No employee selected.</p>
+						<span>Choose a row in the table to see its record summary here.</span>
+					</div>
+				}
+			</aside>
+		</div>
+	</div>
+</section>
