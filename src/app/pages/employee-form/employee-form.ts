@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -13,8 +13,12 @@ import { EmployeeModel } from '../../models/Employee.model';
   styleUrl: './employee-form.css',
 })
 export class EmployeeForm {
-  employeeObj = new EmployeeModel();
   private readonly router = inject(Router);
+  employeeObj = new EmployeeModel();
+
+  ngOnInit(): void {
+    this.loadEditingEmployee();
+  }
 
   saveEmployee() {
     const employees = this.readEmployees();
@@ -37,6 +41,7 @@ export class EmployeeForm {
     }
 
     localStorage.setItem('employees', JSON.stringify(employees));
+    localStorage.removeItem('editingEmployee');
     alert('Employee saved successfully');
     this.resetForm();
     this.router.navigateByUrl('/employee-list');
@@ -44,6 +49,7 @@ export class EmployeeForm {
 
   resetForm() {
     this.employeeObj = new EmployeeModel();
+    localStorage.removeItem('editingEmployee');
   }
 
   private readEmployees(): EmployeeModel[] {
@@ -63,5 +69,25 @@ export class EmployeeForm {
 
   private getNextEmployeeId(employees: EmployeeModel[]) {
     return employees.reduce((maxId, employee) => Math.max(maxId, employee.employeeId), 0) + 1;
+  }
+
+  private loadEditingEmployee() {
+    const rawEditingEmployee = localStorage.getItem('editingEmployee');
+
+    if (!rawEditingEmployee) {
+      return;
+    }
+
+    try {
+      const editingEmployee = JSON.parse(rawEditingEmployee) as EmployeeModel;
+      if (editingEmployee && typeof editingEmployee === 'object') {
+        this.employeeObj = {
+          ...new EmployeeModel(),
+          ...editingEmployee,
+        };
+      }
+    } catch {
+      localStorage.removeItem('editingEmployee');
+    }
   }
 }

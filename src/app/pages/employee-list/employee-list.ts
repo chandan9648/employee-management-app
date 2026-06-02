@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { EmployeeModel } from '../../models/Employee.model';
 
@@ -12,6 +13,7 @@ import { EmployeeModel } from '../../models/Employee.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmployeeList implements OnInit {
+  private readonly router = inject(Router);
   readonly employees = signal<EmployeeModel[]>([]);
 
   readonly selectedEmployeeId = signal<number | null>(1);
@@ -68,9 +70,11 @@ export class EmployeeList implements OnInit {
     this.searchTerm.set(term);
   }
 
-  selectEmployee(employee: EmployeeModel) {
+  editEmployee(employee: EmployeeModel) {
+    localStorage.setItem('editingEmployee', JSON.stringify(employee));
     this.selectedEmployeeId.set(employee.employeeId);
-    this.feedback.set(`Viewing ${employee.name}.`);
+    this.feedback.set(`Editing ${employee.name}.`);
+    this.router.navigateByUrl('/new-employee');
   }
 
   deleteEmployee(employee: EmployeeModel) {
