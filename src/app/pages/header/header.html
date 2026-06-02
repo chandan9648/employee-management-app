@@ -11,8 +11,8 @@
 				<div class="brand-subtitle">Management panel</div>
 			</div>
 		</div>
-
-		<nav class="sidebar-nav">
+        @if(loggedEmpData.role === 'HR'){
+      <nav class="sidebar-nav">
 			<a routerLink="/dashboard" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
 				<i class="fa-solid fa-chart-line nav-icon"></i>
 				<span>Dashboard</span>
@@ -34,6 +34,8 @@
 				<span>Designations</span>
 			</a>
 		</nav>
+		}
+		
 
 		<div class="sidebar-footer">
 			<button type="button" class="logout-button" routerLink="/login" (click)="logout()">
