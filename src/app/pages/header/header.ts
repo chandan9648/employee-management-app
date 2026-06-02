@@ -11,15 +11,15 @@ import { EmployeeModel } from '../../models/Employee.model';
 export class Header {
   isCollapsed = false;
   isMobileSidebarOpen = false;
-  loggedEmpData: EmployeeModel = new EmployeeModel();
+  // loggedEmpData: EmployeeModel = new EmployeeModel();
 
-  constructor() {
-    const localData = localStorage.getItem('empLoginUser');
+  // constructor() {
+  //   const localData = localStorage.getItem('empLoginUser');
 
-    if (localData != null) {
-      this.loggedEmpData = JSON.parse(localData);
-    }
-  }
+  //   if (localData != null) {
+  //     this.loggedEmpData = JSON.parse(localData);
+  //   }
+  // }
 
   toggleSidebar() {
     if (window.innerWidth < 992) {
