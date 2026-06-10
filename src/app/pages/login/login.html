@@ -25,7 +25,7 @@
 					<div class="col-6">
 						<div class="stat-card p-3 rounded-4">
 							<div class="stat-value">100%</div>
-							<div class="stat-label">Static UI</div>
+							<div class="stat-label">Flexible</div>
 						</div>
 					</div>
 				</div>
@@ -51,35 +51,32 @@
 							<span class="input-group-text bg-transparent border-end-0">
 								<span class="field-icon">@</span>
 							</span>
-							<input
-								id="email"
-								type="email"
-								[(ngModel)]="loginObj.email"
-								name="email"
-								class="form-control border-start-0"
-								placeholder="name@company.com"
-								autocomplete="email"
-							/>
+							<input id="email" type="email" [(ngModel)]="loginObj.email" name="email"
+								class="form-control border-start-0" placeholder="name@company.com"
+								autocomplete="email" />
 						</div>
 					</div>
 
 					<div class="mb-3">
-						<label for="password" class="form-label fw-semibold">Password</label>
-						<div class="input-group input-group-lg animated-field">
-							<span class="input-group-text bg-transparent border-end-0">
-								<span class="field-icon">*</span>
-							</span>
-							<input
-								id="password"
-								type="password"
-								[(ngModel)]="loginObj.contactNo"
-								name="contactNo"
-								class="form-control border-start-0"
-								placeholder="Enter your password"
-								autocomplete="current-password"
-							/>
-						</div>
+					<label for="password" class="form-label fw-semibold">Password</label>
+					<div class="input-group input-group-lg animated-field">
+						<span class="input-group-text bg-transparent border-end-0">
+							<i class="fa-solid fa-lock field-icon-fa"></i>
+						</span>
+						<input id="password" [type]="showPassword() ? 'text' : 'password'"
+							[(ngModel)]="loginObj.contactNo" name="contactNo"
+							class="form-control border-start-0 border-end-0"
+							placeholder="Enter your password"
+							autocomplete="current-password" />
+						<button type="button"
+							class="input-group-text bg-transparent border-start-0 eye-toggle"
+							(click)="togglePassword()"
+							[title]="showPassword() ? 'Hide password' : 'Show password'"
+							id="toggle-password-btn">
+							<i class="fa-solid" [class.fa-eye]="!showPassword()" [class.fa-eye-slash]="showPassword()"></i>
+						</button>
 					</div>
+				</div>
 
 					<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
 						<div class="form-check">

@@ -127,6 +127,29 @@
 	color: #0d6efd;
 }
 
+.field-icon-fa {
+	font-size: 0.95rem;
+	color: #0d6efd;
+}
+
+.eye-toggle {
+	cursor: pointer;
+	color: #6b7280;
+	border: none !important;
+	background: transparent !important;
+	padding-inline: 0.85rem;
+	transition: color 0.18s ease;
+}
+
+.eye-toggle:hover {
+	color: #0d6efd;
+}
+
+.eye-toggle:focus {
+	outline: none;
+	box-shadow: none;
+}
+
 .login-button {
 	border-radius: 1rem;
 	box-shadow: 0 14px 30px rgba(13, 110, 253, 0.22);

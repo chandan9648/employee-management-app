@@ -1,11 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
-
-interface DesignationRecord {
-  designationId: number;
-  departmentId: number;
-  designationName: string;
-}
+import { DesignationStateService, DesignationRecord } from '../../services/designation-state';
 
 interface DepartmentOption {
   departmentId: number;
@@ -21,6 +16,7 @@ interface DepartmentOption {
 })
 export class Designation {
   private readonly fb = inject(FormBuilder).nonNullable;
+  private readonly state = inject(DesignationStateService);
 
   readonly departmentOptions: DepartmentOption[] = [
     { departmentId: 1, departmentName: 'Human Resources' },
@@ -30,17 +26,14 @@ export class Designation {
     { departmentId: 5, departmentName: 'Sales' },
   ];
 
-  readonly designations = signal<DesignationRecord[]>([
-    { designationId: 1, departmentId: 2, designationName: 'Senior Software Engineer' },
-    { designationId: 2, departmentId: 1, designationName: 'HR Specialist' },
-    { designationId: 3, departmentId: 4, designationName: 'Operations Coordinator' },
-  ]);
+  // Use shared state so the Dashboard KPI reflects changes immediately
+  readonly designations = this.state.designations;
 
   readonly editingId = signal<number | null>(null);
   readonly feedback = signal('Use the form to create and organize designations by department.');
 
-  readonly designationCount = computed(() => this.designations().length);
-  readonly departmentCoverage = computed(() => new Set(this.designations().map((item) => item.departmentId)).size);
+  readonly designationCount = this.state.count;
+  readonly departmentCoverage = computed(() => new Set(this.designations().map(item => item.departmentId)).size);
   readonly isEditing = computed(() => this.editingId() !== null);
 
   readonly designationForm = this.fb.group({
@@ -60,33 +53,21 @@ export class Designation {
     const currentId = this.editingId();
 
     if (currentId !== null) {
-      this.designations.update((items) =>
-        items.map((item) =>
-          item.designationId === currentId
-            ? {
-                designationId: currentId,
-                departmentId: rawValue.departmentId,
-                designationName: rawValue.designationName.trim(),
-              }
-            : item,
-        ),
-      );
-
+      this.state.update({
+        designationId: currentId,
+        departmentId: rawValue.departmentId,
+        designationName: rawValue.designationName.trim(),
+      });
       this.feedback.set('Designation updated successfully.');
       this.resetForm();
       return;
     }
 
-    const nextId = this.getNextId();
-
-    this.designations.update((items) => [
-      ...items,
-      {
-        designationId: nextId,
-        departmentId: rawValue.departmentId,
-        designationName: rawValue.designationName.trim(),
-      },
-    ]);
+    this.state.add({
+      designationId: 0, // will be assigned by the service
+      departmentId: rawValue.departmentId,
+      designationName: rawValue.designationName.trim(),
+    });
 
     this.feedback.set('Designation saved successfully.');
     this.resetForm();
@@ -103,13 +84,10 @@ export class Designation {
   }
 
   deleteDesignation(item: DesignationRecord) {
-    const shouldDelete = confirm(`Delete designation \"${item.designationName}\"?`);
+    const shouldDelete = confirm(`Delete designation "${item.designationName}"?`);
+    if (!shouldDelete) return;
 
-    if (!shouldDelete) {
-      return;
-    }
-
-    this.designations.update((items) => items.filter((designation) => designation.designationId !== item.designationId));
+    this.state.delete(item.designationId);
 
     if (this.editingId() === item.designationId) {
       this.resetForm();
@@ -130,15 +108,10 @@ export class Designation {
   }
 
   departmentLabel(departmentId: number) {
-    return this.departmentOptions.find((department) => department.departmentId === departmentId)?.departmentName ?? `Department ${departmentId}`;
+    return this.departmentOptions.find(d => d.departmentId === departmentId)?.departmentName ?? `Department ${departmentId}`;
   }
 
   trackByDesignationId(_: number, item: DesignationRecord) {
     return item.designationId;
-  }
-
-  private getNextId() {
-    const lastId = this.designations().reduce((maxId, item) => Math.max(maxId, item.designationId), 0);
-    return lastId + 1;
   }
 }
