@@ -74,13 +74,21 @@ export class Dashboard implements OnInit {
     });
   }
 
+  // Seed designations that mirror the Designation page's local data
+  private readonly seedDesignations = [
+    { designationId: 1, departmentId: 2, designationName: 'Senior Software Engineer' },
+    { designationId: 2, departmentId: 1, designationName: 'HR Specialist' },
+    { designationId: 3, departmentId: 4, designationName: 'Operations Coordinator' },
+  ];
+
   private loadDesignations() {
     this.masterService.getAllDesignation().subscribe({
       next: (res: any) => {
         const data = Array.isArray(res) ? res : (res?.data ?? res?.result ?? res?.items ?? []);
-        this.designations.set(data);
+        // If API returns valid data use it; otherwise fall back to local seed
+        this.designations.set(Array.isArray(data) && data.length > 0 ? data : this.seedDesignations);
       },
-      error: () => this.designations.set([])
+      error: () => this.designations.set(this.seedDesignations)
     });
   }
 

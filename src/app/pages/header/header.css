@@ -30,6 +30,7 @@
 	z-index: 1040;
 	transition: width 0.25s ease, transform 0.25s ease;
 	box-shadow: 0 20px 45px rgba(15, 23, 42, 0.28);
+	overflow-x: hidden;
 }
 
 .sidebar-brand {
@@ -74,7 +75,13 @@
 	gap: 0.45rem;
 	flex: 1;
 	overflow-y: auto;
+	overflow-x: hidden;
 	padding-right: 0.1rem;
+	scrollbar-width: none;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+	display: none;
 }
 
 .nav-item {
