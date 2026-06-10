@@ -50,7 +50,6 @@ export class Dashboard implements OnInit {
     if (localData) this.loggedUser.set(JSON.parse(localData));
     this.loadEmployees();
     this.loadDepartments();
-    this.loadDesignationsFromApi();
   }
 
   private loadEmployees() {
@@ -70,22 +69,7 @@ export class Dashboard implements OnInit {
     });
   }
 
-  /** Try to load designations from the API and sync into the shared state service. */
-  private loadDesignationsFromApi() {
-    this.masterService.getAllDesignation().subscribe({
-      next: (res: any) => {
-        const data = Array.isArray(res) ? res : (res?.data ?? res?.result ?? res?.items ?? []);
-        // Only override the shared state if the API actually returned records
-        if (Array.isArray(data) && data.length > 0) {
-          this.designationState.set(data);
-        }
-        // If API returns empty/nothing, keep the existing shared-state seed data intact
-      },
-      error: () => {
-        // Leave the shared service seed data untouched so the count stays correct
-      }
-    });
-  }
+
 
   navigateTo(path: string) {
     this.router.navigateByUrl(path);
