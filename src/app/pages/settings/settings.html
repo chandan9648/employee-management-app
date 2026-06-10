@@ -1,0 +1,294 @@
+<div class="settings-root">
+
+  <!-- Page Header -->
+  <div class="settings-header">
+    <div class="header-info">
+      <h2 class="page-title">Settings</h2>
+      <p class="page-subtitle">Manage your account credentials and preferences</p>
+    </div>
+  </div>
+
+  <div class="settings-layout">
+
+    <!-- Sidebar -->
+    <div class="settings-sidebar">
+
+      <!-- Avatar Card -->
+      <div class="avatar-card">
+        <div class="avatar-circle" [style.background]="'linear-gradient(135deg, #2563eb, #7c3aed)'">
+          {{ getInitials(loggedUser()?.name || 'Admin') }}
+        </div>
+        <div class="avatar-name">{{ loggedUser()?.name || 'Admin' }}</div>
+        <div class="avatar-role">{{ loggedUser()?.role || 'Administrator' }}</div>
+        <div class="avatar-email">{{ loggedUser()?.email || '' }}</div>
+      </div>
+
+      <!-- Nav -->
+      <nav class="settings-nav">
+        <button class="settings-nav-item" [class.active]="activeTab() === 'profile'"
+          (click)="setTab('profile')" id="tab-profile">
+          <i class="fa-solid fa-circle-user"></i>
+          <span>Profile</span>
+        </button>
+        <button class="settings-nav-item" [class.active]="activeTab() === 'password'"
+          (click)="setTab('password')" id="tab-password">
+          <i class="fa-solid fa-lock"></i>
+          <span>Password</span>
+        </button>
+        <button class="settings-nav-item" [class.active]="activeTab() === 'preferences'"
+          (click)="setTab('preferences')" id="tab-preferences">
+          <i class="fa-solid fa-sliders"></i>
+          <span>Preferences</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Content Panel -->
+    <div class="settings-content">
+
+      <!-- ── PROFILE TAB ── -->
+      @if (activeTab() === 'profile') {
+        <div class="tab-panel">
+          <div class="panel-header">
+            <h3 class="panel-title"><i class="fa-solid fa-circle-user"></i> Profile Information</h3>
+            <p class="panel-subtitle">Update your personal details and contact information</p>
+          </div>
+
+          @if (profileMsg()) {
+            <div class="alert" [class.alert-success]="profileMsg()!.type === 'success'"
+                               [class.alert-error]="profileMsg()!.type === 'error'">
+              <i class="fa-solid" [class.fa-circle-check]="profileMsg()!.type === 'success'"
+                                  [class.fa-circle-xmark]="profileMsg()!.type === 'error'"></i>
+              {{ profileMsg()!.text }}
+            </div>
+          }
+
+          <form class="settings-form" #profileForm="ngForm" (ngSubmit)="saveProfile()">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Full Name *</label>
+                <input class="form-control" type="text" placeholder="Enter full name"
+                  [(ngModel)]="profileObj()['name']" name="name" required
+                  (ngModelChange)="profileObj.update(p => ({...p, name: $event}))" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email Address *</label>
+                <input class="form-control" type="email" placeholder="Enter email"
+                  [(ngModel)]="profileObj()['email']" name="email" required
+                  (ngModelChange)="profileObj.update(p => ({...p, email: $event}))" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Contact Number</label>
+                <input class="form-control" type="tel" placeholder="e.g. 9876543210"
+                  [(ngModel)]="profileObj()['contactNo']" name="contactNo"
+                  (ngModelChange)="profileObj.update(p => ({...p, contactNo: $event}))" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Alternate Contact</label>
+                <input class="form-control" type="tel" placeholder="Alternate number"
+                  [(ngModel)]="profileObj()['altContactNo']" name="altContactNo"
+                  (ngModelChange)="profileObj.update(p => ({...p, altContactNo: $event}))" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">City</label>
+                <input class="form-control" type="text" placeholder="City"
+                  [(ngModel)]="profileObj()['city']" name="city"
+                  (ngModelChange)="profileObj.update(p => ({...p, city: $event}))" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">State</label>
+                <input class="form-control" type="text" placeholder="State"
+                  [(ngModel)]="profileObj()['state']" name="state"
+                  (ngModelChange)="profileObj.update(p => ({...p, state: $event}))" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Pincode</label>
+                <input class="form-control" type="text" placeholder="Pincode"
+                  [(ngModel)]="profileObj()['pincode']" name="pincode"
+                  (ngModelChange)="profileObj.update(p => ({...p, pincode: $event}))" />
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label">Address</label>
+              <textarea class="form-control form-textarea" placeholder="Full address"
+                [(ngModel)]="profileObj()['address']" name="address" rows="3"
+                (ngModelChange)="profileObj.update(p => ({...p, address: $event}))"></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-primary" [disabled]="profileSaving()" id="save-profile-btn">
+                @if (profileSaving()) {
+                  <i class="fa-solid fa-spinner fa-spin"></i> Saving…
+                } @else {
+                  <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                }
+              </button>
+            </div>
+          </form>
+        </div>
+      }
+
+      <!-- ── PASSWORD TAB ── -->
+      @if (activeTab() === 'password') {
+        <div class="tab-panel">
+          <div class="panel-header">
+            <h3 class="panel-title"><i class="fa-solid fa-lock"></i> Change Password</h3>
+            <p class="panel-subtitle">Keep your account secure with a strong password</p>
+          </div>
+
+          @if (passwordMsg()) {
+            <div class="alert" [class.alert-success]="passwordMsg()!.type === 'success'"
+                               [class.alert-error]="passwordMsg()!.type === 'error'">
+              <i class="fa-solid" [class.fa-circle-check]="passwordMsg()!.type === 'success'"
+                                  [class.fa-circle-xmark]="passwordMsg()!.type === 'error'"></i>
+              {{ passwordMsg()!.text }}
+            </div>
+          }
+
+          <form class="settings-form" (ngSubmit)="changePassword()">
+            <div class="form-group full-width">
+              <label class="form-label">Current Password *</label>
+              <div class="input-group">
+                <input class="form-control" [type]="showCurrentPwd() ? 'text' : 'password'"
+                  placeholder="Enter current password"
+                  [(ngModel)]="passwordForm.currentPassword" name="currentPassword" />
+                <button type="button" class="input-addon" (click)="showCurrentPwd.update(v => !v)">
+                  <i class="fa-solid" [class.fa-eye]="!showCurrentPwd()" [class.fa-eye-slash]="showCurrentPwd()"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">New Password *</label>
+                <div class="input-group">
+                  <input class="form-control" [type]="showNewPwd() ? 'text' : 'password'"
+                    placeholder="Min. 6 characters"
+                    [(ngModel)]="passwordForm.newPassword" name="newPassword" />
+                  <button type="button" class="input-addon" (click)="showNewPwd.update(v => !v)">
+                    <i class="fa-solid" [class.fa-eye]="!showNewPwd()" [class.fa-eye-slash]="showNewPwd()"></i>
+                  </button>
+                </div>
+
+                <!-- Strength meter -->
+                @if (passwordForm.newPassword) {
+                  <div class="strength-wrap">
+                    <div class="strength-bar">
+                      <div class="strength-fill"
+                        [style.width.%]="passwordStrength().pct"
+                        [style.background]="passwordStrength().color"></div>
+                    </div>
+                    <span class="strength-label" [style.color]="passwordStrength().color">
+                      {{ passwordStrength().label }}
+                    </span>
+                  </div>
+                }
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Confirm New Password *</label>
+                <div class="input-group">
+                  <input class="form-control" [type]="showConfirmPwd() ? 'text' : 'password'"
+                    placeholder="Repeat new password"
+                    [(ngModel)]="passwordForm.confirmPassword" name="confirmPassword"
+                    [class.input-match]="passwordForm.confirmPassword && passwordForm.newPassword === passwordForm.confirmPassword"
+                    [class.input-mismatch]="passwordForm.confirmPassword && passwordForm.newPassword !== passwordForm.confirmPassword" />
+                  <button type="button" class="input-addon" (click)="showConfirmPwd.update(v => !v)">
+                    <i class="fa-solid" [class.fa-eye]="!showConfirmPwd()" [class.fa-eye-slash]="showConfirmPwd()"></i>
+                  </button>
+                </div>
+                @if (passwordForm.confirmPassword && passwordForm.newPassword !== passwordForm.confirmPassword) {
+                  <span class="field-hint error">Passwords do not match</span>
+                }
+              </div>
+            </div>
+
+            <!-- Tips -->
+            <div class="password-tips">
+              <p class="tips-title"><i class="fa-solid fa-shield-halved"></i> Password requirements</p>
+              <ul>
+                <li [class.met]="passwordForm.newPassword.length >= 8">At least 8 characters</li>
+                <li [class.met]="/[A-Z]/.test(passwordForm.newPassword)">One uppercase letter</li>
+                <li [class.met]="/[0-9]/.test(passwordForm.newPassword)">One number</li>
+                <li [class.met]="/[^A-Za-z0-9]/.test(passwordForm.newPassword)">One special character</li>
+              </ul>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-primary" [disabled]="passwordSaving()" id="change-password-btn">
+                @if (passwordSaving()) {
+                  <i class="fa-solid fa-spinner fa-spin"></i> Updating…
+                } @else {
+                  <i class="fa-solid fa-key"></i> Update Password
+                }
+              </button>
+            </div>
+          </form>
+        </div>
+      }
+
+      <!-- ── PREFERENCES TAB ── -->
+      @if (activeTab() === 'preferences') {
+        <div class="tab-panel">
+          <div class="panel-header">
+            <h3 class="panel-title"><i class="fa-solid fa-sliders"></i> Preferences</h3>
+            <p class="panel-subtitle">Customize your application experience</p>
+          </div>
+
+          @if (profileMsg()) {
+            <div class="alert alert-success">
+              <i class="fa-solid fa-circle-check"></i> {{ profileMsg()!.text }}
+            </div>
+          }
+
+          <div class="pref-section">
+            <div class="pref-label">
+              <span class="pref-title">Theme</span>
+              <span class="pref-sub">Choose your preferred display mode</span>
+            </div>
+            <div class="theme-picker">
+              <button class="theme-option" [class.selected]="theme() === 'light'" (click)="setTheme('light')" id="theme-light">
+                <i class="fa-solid fa-sun"></i>
+                <span>Light</span>
+              </button>
+              <button class="theme-option" [class.selected]="theme() === 'dark'" (click)="setTheme('dark')" id="theme-dark">
+                <i class="fa-solid fa-moon"></i>
+                <span>Dark</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="pref-divider"></div>
+
+          <div class="pref-section">
+            <div class="pref-label">
+              <span class="pref-title">Email Notifications</span>
+              <span class="pref-sub">Receive system alerts and updates via email</span>
+            </div>
+            <label class="toggle-switch" id="toggle-notifications">
+              <input type="checkbox" [checked]="emailNotifications()"
+                (change)="emailNotifications.set($any($event.target).checked)" />
+              <span class="toggle-track">
+                <span class="toggle-thumb"></span>
+              </span>
+            </label>
+          </div>
+
+          <div class="form-actions" style="margin-top: 2rem;">
+            <button type="button" class="btn-primary" (click)="savePreferences()" id="save-preferences-btn">
+              <i class="fa-solid fa-floppy-disk"></i> Save Preferences
+            </button>
+          </div>
+        </div>
+      }
+
+    </div>
+  </div>
+</div>

@@ -1,1 +1,179 @@
-<p>dashboard works!</p>
+<div class="dashboard-root">
+
+  <!-- Welcome Banner -->
+  <div class="welcome-banner">
+    <div class="welcome-text">
+      <p class="welcome-eyebrow">Good day 👋</p>
+      <h2 class="welcome-heading">Welcome back, {{ loggedUser()?.name || 'Admin' }}</h2>
+      <p class="welcome-sub">Here's a real-time snapshot of your workforce data.</p>
+    </div>
+    <div class="welcome-illustration">
+      <i class="fa-solid fa-chart-pie"></i>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card kpi-blue" (click)="navigateTo('/employee-list')" role="button" tabindex="0">
+      <div class="kpi-icon-wrap">
+        <i class="fa-solid fa-users"></i>
+      </div>
+      <div class="kpi-body">
+        <div class="kpi-value">{{ totalEmployees() }}</div>
+        <div class="kpi-label">Total Employees</div>
+        <div class="kpi-trend"><i class="fa-solid fa-arrow-right"></i> View all</div>
+      </div>
+    </div>
+
+    <div class="kpi-card kpi-purple" (click)="navigateTo('/department')" role="button" tabindex="0">
+      <div class="kpi-icon-wrap">
+        <i class="fa-solid fa-building"></i>
+      </div>
+      <div class="kpi-body">
+        <div class="kpi-value">{{ totalDepartments() }}</div>
+        <div class="kpi-label">Departments</div>
+        <div class="kpi-trend"><i class="fa-solid fa-arrow-right"></i> Manage</div>
+      </div>
+    </div>
+
+    <div class="kpi-card kpi-teal" (click)="navigateTo('/designation')" role="button" tabindex="0">
+      <div class="kpi-icon-wrap">
+        <i class="fa-solid fa-id-badge"></i>
+      </div>
+      <div class="kpi-body">
+        <div class="kpi-value">{{ totalDesignations() }}</div>
+        <div class="kpi-label">Designations</div>
+        <div class="kpi-trend"><i class="fa-solid fa-arrow-right"></i> Manage</div>
+      </div>
+    </div>
+
+    <div class="kpi-card kpi-orange" (click)="navigateTo('/new-employee/0')" role="button" tabindex="0">
+      <div class="kpi-icon-wrap">
+        <i class="fa-solid fa-user-plus"></i>
+      </div>
+      <div class="kpi-body">
+        <div class="kpi-value">+</div>
+        <div class="kpi-label">Add Employee</div>
+        <div class="kpi-trend"><i class="fa-solid fa-arrow-right"></i> Quick add</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="content-grid">
+
+    <!-- Recent Employees Table -->
+    <div class="card recent-employees">
+      <div class="card-header">
+        <div>
+          <h3 class="card-title">Recent Employees</h3>
+          <p class="card-subtitle">Latest additions to your workforce</p>
+        </div>
+        <a routerLink="/employee-list" class="view-all-btn">View all <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      @if (recentEmployees().length === 0) {
+        <div class="empty-state">
+          <i class="fa-solid fa-users-slash"></i>
+          <p>No employees found. <a routerLink="/new-employee/0">Add one now</a></p>
+        </div>
+      } @else {
+        <div class="table-wrapper">
+          <table class="emp-table">
+            <thead>
+              <tr>
+                <th>Employee</th>
+                <th>Role</th>
+                <th>Location</th>
+                <th>Contact</th>
+                <th>Joined</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (emp of recentEmployees(); track emp.employeeId) {
+                <tr (click)="navigateTo('/new-employee/' + emp.employeeId)" class="table-row">
+                  <td>
+                    <div class="emp-cell">
+                      <div class="emp-avatar" [style.background]="getAvatarColor(emp.name)">
+                        {{ getInitials(emp.name) }}
+                      </div>
+                      <div>
+                        <div class="emp-name">{{ emp.name }}</div>
+                        <div class="emp-email">{{ emp.email }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="role-badge">{{ emp.role }}</span></td>
+                  <td class="text-muted">{{ emp.city }}, {{ emp.state }}</td>
+                  <td class="text-muted">{{ emp.contactNo }}</td>
+                  <td class="text-muted">{{ emp.createdDate | date:'dd MMM yyyy' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+
+    <!-- Right Panel -->
+    <div class="right-panel">
+
+      <!-- Role Distribution -->
+      <div class="card role-dist">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">Role Distribution</h3>
+            <p class="card-subtitle">Breakdown by employee role</p>
+          </div>
+        </div>
+        @if (roleDistribution().length === 0) {
+          <div class="empty-state small">
+            <i class="fa-solid fa-chart-pie"></i>
+            <p>No data yet</p>
+          </div>
+        } @else {
+          <div class="role-list">
+            @for (item of roleDistribution(); track item.role) {
+              <div class="role-row">
+                <div class="role-info">
+                  <span class="role-name">{{ item.role }}</span>
+                  <span class="role-count">{{ item.count }}</span>
+                </div>
+                <div class="progress-bar-track">
+                  <div class="progress-bar-fill" [style.width.%]="item.pct"></div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card quick-actions">
+        <div class="card-header">
+          <h3 class="card-title">Quick Actions</h3>
+        </div>
+        <div class="action-list">
+          <a routerLink="/new-employee/0" class="action-item action-blue">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>New Employee</span>
+          </a>
+          <a routerLink="/department" class="action-item action-purple">
+            <i class="fa-solid fa-building"></i>
+            <span>Add Department</span>
+          </a>
+          <a routerLink="/designation" class="action-item action-teal">
+            <i class="fa-solid fa-id-badge"></i>
+            <span>Add Designation</span>
+          </a>
+          <a routerLink="/settings" class="action-item action-orange">
+            <i class="fa-solid fa-gear"></i>
+            <span>Settings</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
