@@ -32,13 +32,12 @@ export const routes: Routes = [
                 component: Dashboard
             },
             {
-                path: 'new-employee/:id',
+                path: 'new-employee',
                 component: EmployeeForm
             },
             {
-                path: 'new employee',
-                redirectTo: 'new-employee',
-                pathMatch: 'full'
+                path: 'new-employee/:id',
+                component: EmployeeForm
             },
             {
                 path: 'employee-list',
